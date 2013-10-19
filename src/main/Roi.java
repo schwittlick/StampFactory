@@ -80,5 +80,13 @@ public class Roi {
   public int getEndY() {
     return ( roiArea.y + roiArea.height );
   }
+  
+  public int getWidth(){
+    return roiArea.width;
+  }
+  
+  public int getHeight(){
+    return roiArea.height;
+  }
 
 }
