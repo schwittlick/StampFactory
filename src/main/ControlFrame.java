@@ -52,6 +52,7 @@ public class ControlFrame extends PApplet {
     cp.addButton( "DILATE" ).setPosition( 10, 350 ).setSize( 50, 25 );
     cp.addButton( "ERODE" ).setPosition( 80, 350 ).setSize( 50, 25 );
     cp.addButton(  "PHOTO" ).setPosition( 150, 350).setSize( 50, 25 );
+    cp.addButton( "MESH" ).setPosition( 220, 350 ).setSize( 50, 25 );
 
     imageDDList.addItems( availableImages );
 
@@ -86,6 +87,9 @@ public class ControlFrame extends PApplet {
       case "CAMS":
         int selectedCameraInputIndex = ( int ) e.getValue();
         parent.setCameraInput( CameraInput.getAvailableCameras().get( selectedCameraInputIndex ) );
+        break;
+      case "MESH":
+        parent.createMesh();
         break;
     }
   }
