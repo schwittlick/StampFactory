@@ -262,6 +262,15 @@ public class ImageProcessor {
     editedImage.filter( PConstants.ERODE );
   }
 
+  protected PImage getSelectedImageRoi() {
+    PImage returnImage = new PImage( editedImage.width, editedImage.height, editedImage.format );
+
+    returnImage.copy( editedImage, roi.getStartX(), roi.getStartY(), roi.getWidth(),
+        roi.getHeight(), 0, 0, roi.getWidth(), roi.getHeight() );
+
+    return returnImage;
+  }
+
   public void drawEdited() {
     try {
       p.image( editedImage, 0, 0 );
