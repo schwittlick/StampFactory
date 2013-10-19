@@ -1,7 +1,9 @@
 package main;
 
+import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.video.Capture;
+import toxi.geom.mesh.LaplacianSmooth;
 
 public class StampFactoryApplet extends PApplet {
 
@@ -14,6 +16,8 @@ public class StampFactoryApplet extends PApplet {
   private ControlFrame controls;
 
   private ImageProcessor improc;
+  private MeshCreator meshCreator;
+  private PeasyCam cam;
   Capture cap;
 
   public void init() {
@@ -21,32 +25,28 @@ public class StampFactoryApplet extends PApplet {
   }
 
   public void setup() {
-    size( 1200, 800, P2D );
+    size( 1200, 800, P3D );
 
     improc = new ImageProcessor( this );
     improc.setRoi( new Roi( this ) );
+
     controls = ControlFrame.createControlFrame( this, "CONTROLS", 600, 500 );
-    
-    cap = new Capture( this, 640, 480 );
-    cap.start();
+
+    meshCreator = new MeshCreator( this );
+
+    cam = new PeasyCam( this, 500 );
   }
 
   public void draw() {
     background( 0 );
-    
-    if( cap.available()){
-      cap.read();
-      image(cap, 0, 0 );
-    }
+    lights();
     
     try {
-      //image( improc.getCameraInput(), 0, 0 );
+      shape( meshCreator.getShape() );
     } catch ( NullPointerException e ) {
-      //System.out.println("NULLPOIUNTREW");
+      improc.drawEdited();
+      improc.getRoi().draw();
     }
-
-   // improc.drawEdited();
-   // improc.getRoi().draw();
   }
 
   public void mousePressed() {
@@ -70,6 +70,9 @@ public class StampFactoryApplet extends PApplet {
       case 'r':
         improc.getRoi().resetRoi();
         break;
+      case 'f':
+        new LaplacianSmooth().filter( meshCreator.getMesh(), 1 );
+        break;
     }
   }
 
@@ -79,6 +82,11 @@ public class StampFactoryApplet extends PApplet {
 
   protected void setImageFromCamera() {
     improc.useCameraInput();
+  }
+
+  protected void createMesh() {
+    meshCreator.addImage( improc.getSelectedImageRoi() );
+    meshCreator.createMesh();
   }
 
   protected void setCameraInput( String input ) {
