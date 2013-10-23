@@ -65,7 +65,7 @@ public class ControlFrame extends PApplet {
       case "IMAGES":
         System.out.println( e );
         int index = ( int ) e.getValue();
-        parent.addImage( sketchPath( "data/" + availableImages.get( index ) ) );
+        parent.addImage( sketchPath( "images/" + availableImages.get( index ) ) );
         break;
       case "THRESHOLD":
         parent.applyThreshold( e.getValue() );
