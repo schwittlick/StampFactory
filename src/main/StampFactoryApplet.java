@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import peasy.PeasyCam;
 import processing.core.PApplet;
-import processing.video.Capture;
 import toxi.geom.mesh.LaplacianSmooth;
 
 public class StampFactoryApplet extends PApplet {
@@ -20,7 +19,6 @@ public class StampFactoryApplet extends PApplet {
   private ImageProcessor improc;
   private MeshCreator meshCreator;
   private PeasyCam cam;
-  Capture cap;
 
   public void init() {
     super.init();
@@ -81,6 +79,7 @@ public class StampFactoryApplet extends PApplet {
   }
 
   protected void addImage( String path ) {
+    meshCreator.reset();
     improc.addOriginalImage( loadImage( path ) );
   }
 
