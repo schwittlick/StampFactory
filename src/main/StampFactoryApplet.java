@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Calendar;
+
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.video.Capture;
@@ -40,12 +42,14 @@ public class StampFactoryApplet extends PApplet {
   public void draw() {
     background( 0 );
     lights();
-    
+
     try {
       shape( meshCreator.getShape() );
     } catch ( NullPointerException e ) {
+      cam.beginHUD();
       improc.drawEdited();
       improc.getRoi().draw();
+      cam.endHUD();
     }
   }
 
@@ -89,12 +93,21 @@ public class StampFactoryApplet extends PApplet {
     meshCreator.createMesh();
   }
 
+  protected void saveMesh() {
+    meshCreator.save();
+  }
+
   protected void setCameraInput( String input ) {
     this.improc.initCameraInput( input );
   }
 
   protected ImageProcessor getImageProcessor() {
     return improc;
+  }
+
+  public static String timestamp() {
+    Calendar now = Calendar.getInstance();
+    return String.format( "%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now );
   }
 
   public static void main( String[ ] args ) {
