@@ -263,7 +263,7 @@ public class ImageProcessor {
   }
 
   protected PImage getSelectedImageRoi() {
-    PImage returnImage = new PImage( editedImage.width, editedImage.height, editedImage.format );
+    PImage returnImage = new PImage( roi.getWidth(), roi.getHeight(), editedImage.format );
 
     returnImage.copy( editedImage, roi.getStartX(), roi.getStartY(), roi.getWidth(),
         roi.getHeight(), 0, 0, roi.getWidth(), roi.getHeight() );
