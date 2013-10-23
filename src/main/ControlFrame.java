@@ -37,7 +37,7 @@ public class ControlFrame extends PApplet {
     cp.setBroadcast( false );
 
     imageDDList = cp.addDropdownList( "IMAGES" ).setPosition( 10, 30 ).setSize( 300, 300 );
-    availableImages = ImageProcessor.getImagesInFolder( this, "data" );
+    availableImages = ImageProcessor.getImagesInFolder( this, "images" );
 
     cp.addSlider( "THRESHOLD" ).setPosition( 10, 180 ).setSize( 300, 20 ).setValue( 0 )
         .setRange( 0, 1 );
@@ -51,9 +51,9 @@ public class ControlFrame extends PApplet {
 
     cp.addButton( "DILATE" ).setPosition( 10, 350 ).setSize( 50, 25 );
     cp.addButton( "ERODE" ).setPosition( 80, 350 ).setSize( 50, 25 );
-    cp.addButton(  "PHOTO" ).setPosition( 150, 350).setSize( 50, 25 );
+    cp.addButton( "PHOTO" ).setPosition( 150, 350 ).setSize( 50, 25 );
     cp.addButton( "MESH" ).setPosition( 220, 350 ).setSize( 50, 25 );
-    cp.addButton( "SAVE").setPosition( 290, 350 ).setSize( 50, 25 );
+    cp.addButton( "SAVE" ).setPosition( 290, 350 ).setSize( 50, 25 );
 
     imageDDList.addItems( availableImages );
 

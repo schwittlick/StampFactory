@@ -131,7 +131,8 @@ public class MeshCreator {
   }
 
   public void save() {
+    String directory = "stamps/";
     String fileName = "stamp_" + StampFactoryApplet.timestamp() + ".stl";
-    this.mesh.saveAsSTL( fileName );
+    this.mesh.saveAsSTL( directory + fileName );
   }
 }
