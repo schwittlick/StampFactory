@@ -53,6 +53,7 @@ public class ControlFrame extends PApplet {
     cp.addButton( "ERODE" ).setPosition( 80, 350 ).setSize( 50, 25 );
     cp.addButton(  "PHOTO" ).setPosition( 150, 350).setSize( 50, 25 );
     cp.addButton( "MESH" ).setPosition( 220, 350 ).setSize( 50, 25 );
+    cp.addButton( "SAVE").setPosition( 290, 350 ).setSize( 50, 25 );
 
     imageDDList.addItems( availableImages );
 
@@ -90,6 +91,9 @@ public class ControlFrame extends PApplet {
         break;
       case "MESH":
         parent.createMesh();
+        break;
+      case "SAVE":
+        parent.saveMesh();
         break;
     }
   }
