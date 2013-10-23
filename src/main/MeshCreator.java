@@ -7,21 +7,25 @@ import processing.core.PShape;
 import processing.core.PVector;
 import toxi.geom.Vec3D;
 import toxi.geom.mesh.WETriangleMesh;
+import toxi.processing.ToxiclibsSupport;
 
 public class MeshCreator {
   private PApplet p;
+  private ToxiclibsSupport gfx;
 
   private WETriangleMesh mesh;
   private PShape shape;
   private PImage baseImage;
   private int resolution, threshold;
+  private boolean finishedCreatingMesh;
 
   public MeshCreator( PApplet p ) {
     this.p = p;
+    this.gfx = new ToxiclibsSupport( p );
+
     this.resolution = 1;
     this.threshold = 20;
-
-    this.mesh = new WETriangleMesh( "stampMesh" );
+    this.finishedCreatingMesh = false;
   }
 
   public void addImage( PImage im ) {
@@ -33,13 +37,28 @@ public class MeshCreator {
     }
   }
 
+  private void adjustResolution() {
+    int count = 0;
+    for ( int i = 0; i < baseImage.height - resolution; i += resolution ) {
+      for ( int j = 0; j < baseImage.width - resolution; j += resolution ) {
+        count++;
+      }
+    }
+
+    if ( count > 500000 ) {
+      resolution = 8;
+    }
+  }
+
   public void createMesh() {
     shape = p.createShape();
     shape.beginShape( PConstants.TRIANGLES );
     shape.noStroke();
     shape.fill( 255 );
     baseImage.loadPixels();
-    
+
+    adjustResolution();
+
     for ( int i = 0; i < baseImage.height - resolution; i += resolution ) {
       for ( int j = 0; j < baseImage.width - resolution; j += resolution ) {
         shape.vertex( j, i, p.red( baseImage.pixels[ i * baseImage.width + j ] ) / threshold );
@@ -108,18 +127,23 @@ public class MeshCreator {
 
     System.out.println( "VERTEX COUNT: " + shape.getVertexCount() );
 
+    this.mesh = new WETriangleMesh( "stampMesh" );
+
     for ( int i = 0; i < shape.getVertexCount(); i += 3 ) {
       PVector v1 = shape.getVertex( i );
       PVector v2 = shape.getVertex( i + 1 );
       PVector v3 = shape.getVertex( i + 2 );
-      mesh.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ), new Vec3D( v3.x,
-          v3.y, v3.z ) );
+      this.mesh.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ), new Vec3D(
+          v3.x, v3.y, v3.z ) );
+      System.out.println(i +" / " +shape.getVertexCount() + " done.");
     }
+
     this.mesh.faceOutwards();
     this.mesh.computeFaceNormals();
     this.mesh.computeVertexNormals();
 
     System.out.println( "CREATED MESH" );
+    finishedCreatingMesh = true;
   }
 
   public PShape getShape() {
@@ -128,6 +152,17 @@ public class MeshCreator {
 
   public WETriangleMesh getMesh() {
     return this.mesh;
+  }
+
+  public void drawMesh() {
+    if ( finishedCreatingMesh ) {
+      gfx.mesh( getMesh() );
+    }
+  }
+
+  public void reset() {
+    this.shape = null;
+    this.mesh = null;
   }
 
   public void save() {
