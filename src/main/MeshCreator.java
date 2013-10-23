@@ -41,12 +41,13 @@ public class MeshCreator {
     int count = 0;
     for ( int i = 0; i < baseImage.height - resolution; i += resolution ) {
       for ( int j = 0; j < baseImage.width - resolution; j += resolution ) {
-        count++;
+        count+=6;
       }
     }
 
     if ( count > 500000 ) {
-      resolution = 8;
+      this.resolution = 3;
+      System.out.println("Adjusted resolution to " + resolution);
     }
   }
 
@@ -56,6 +57,7 @@ public class MeshCreator {
     shape.noStroke();
     shape.fill( 255 );
     baseImage.loadPixels();
+    this.mesh = new WETriangleMesh( "stampMesh" );
 
     adjustResolution();
 
@@ -75,72 +77,114 @@ public class MeshCreator {
             p.red( baseImage.pixels[ ( i + resolution ) * baseImage.width + j + resolution ] )
                 / threshold );
 
+        // Vec3D p1 = new Vec3D(j, i, p.red(baseImage.pixels[i*baseImage.width+j])/threshold);
+        // Vec3D p2 = new Vec3D(j+resolution, i,
+        // p.red(baseImage.pixels[i*baseImage.width+j+resolution])/threshold);
+        // Vec3D p3 = new Vec3D(j+resolution, i+resolution,
+        // p.red(baseImage.pixels[(i+resolution)*baseImage.width+j+resolution])/threshold);
+        // Vec3D p4 = new Vec3D(j, i, p.red(baseImage.pixels[i*baseImage.width+j])/threshold);
+        // Vec3D p5 = new Vec3D(j, i+resolution,
+        // p.red(baseImage.pixels[(i+resolution)*baseImage.width+j])/threshold);
+        // Vec3D p6 = new Vec3D(j+resolution, i+resolution,
+        // p.red(baseImage.pixels[(i+resolution)*baseImage.width+j+resolution])/threshold);
+        // mesh.addFace(p1, p2, p3);
+        // mesh.addFace(p4, p5, p6);
+
       }
       System.out.println( i + "/" + ( baseImage.height - 2 ) + " resolution done" );
     }
 
-    shape.vertex( 0, 0, 0 );
-    shape.vertex( 0, baseImage.height - resolution, 0 );
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-
-    shape.vertex( 0, 0, 0 );
-    shape.vertex( 0, 0, -30 );
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-
-    // second
-    shape.vertex( baseImage.width - resolution, 0, 0 );
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0 );
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
-
-    shape.vertex( baseImage.width - resolution, 0, 0 );
-    shape.vertex( baseImage.width - resolution, 0, -30 );
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
-
-    // third
-    shape.vertex( baseImage.width - resolution, 0, 0 );
-    shape.vertex( 0, 0, 0 );
-    shape.vertex( 0, 0, -30 );
-
-    shape.vertex( 0, 0, -30 );
-    shape.vertex( baseImage.width - resolution, 0, 0 );
-    shape.vertex( baseImage.width - resolution, 0, -30 );
-
-    // fourth
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0 );
-    shape.vertex( 0, baseImage.height - resolution, 0 );
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0 );
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
-
-    // closing
-    shape.vertex( 0, 0, -30 );
-    shape.vertex( baseImage.width - resolution, 0, -30 );
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-
-    shape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
-    shape.vertex( baseImage.width - resolution, 0, -30 );
-    shape.vertex( 0, baseImage.height - resolution, -30 );
-
     shape.endShape();
 
-    System.out.println( "VERTEX COUNT: " + shape.getVertexCount() );
+    PShape boxShape = p.createShape();
+    boxShape.beginShape( PConstants.TRIANGLES );
+    boxShape.noStroke();
+    boxShape.fill( 255 );
 
-    this.mesh = new WETriangleMesh( "stampMesh" );
+    boxShape.vertex( 0, 0, 0 );
+    boxShape.vertex( 0, baseImage.height - resolution, 0.05f );
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+
+    boxShape.vertex( 0, 0, 0 );
+    boxShape.vertex( 0, 0, -30 );
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+
+    // second
+    boxShape.vertex( baseImage.width - resolution, 0, 0.05f );
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0.05f );
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
+
+    boxShape.vertex( baseImage.width - resolution, 0, 0.05f );
+    boxShape.vertex( baseImage.width - resolution, 0, -30 );
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
+
+    // third
+    boxShape.vertex( baseImage.width - resolution, 0, 0.05f );
+    boxShape.vertex( 0, 0, 0.05f );
+    boxShape.vertex( 0, 0, -30 );
+
+    boxShape.vertex( 0, 0, -30 );
+    boxShape.vertex( baseImage.width - resolution, 0, 0.05f );
+    boxShape.vertex( baseImage.width - resolution, 0, -30 );
+
+    // fourth
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0.05f );
+    boxShape.vertex( 0, baseImage.height - resolution, 0.05f );
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, 0.05f );
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
+
+    // closing
+    boxShape.vertex( 0, 0, -30 );
+    boxShape.vertex( baseImage.width - resolution, 0, -30 );
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+
+    boxShape.vertex( baseImage.width - resolution, baseImage.height - resolution, -30 );
+    boxShape.vertex( baseImage.width - resolution, 0, -30 );
+    boxShape.vertex( 0, baseImage.height - resolution, -30 );
+
+    boxShape.endShape();
+
+    System.out.println( "VERTEX COUNT: " + ( shape.getVertexCount() + boxShape.getVertexCount() ) );
+
+    WETriangleMesh toFaceOutwards = new WETriangleMesh();
+    WETriangleMesh dontFaceOutwards = new WETriangleMesh();
 
     for ( int i = 0; i < shape.getVertexCount(); i += 3 ) {
       PVector v1 = shape.getVertex( i );
       PVector v2 = shape.getVertex( i + 1 );
       PVector v3 = shape.getVertex( i + 2 );
-      this.mesh.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ), new Vec3D(
-          v3.x, v3.y, v3.z ) );
-      System.out.println(i +" / " +shape.getVertexCount() + " done.");
+      // the main plane, where the normals go wrong
+      if ( ( v1.z == 12.75f && v2.z == 12.75f && v3.z == 12.75f ) ) {
+        toFaceOutwards.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ),
+            new Vec3D( v3.x, v3.y, v3.z ), new Vec3D( 0, 0, 1 ) );
+      } else {
+        dontFaceOutwards.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ),
+            new Vec3D( v3.x, v3.y, v3.z ), new Vec3D( 0, 0, 1 ) );
+      }
+     // System.out.println( i + " / " + shape.getVertexCount() + " done." );
     }
 
-    this.mesh.faceOutwards();
-    this.mesh.computeFaceNormals();
-    this.mesh.computeVertexNormals();
+    for ( int i = 0; i < boxShape.getVertexCount(); i += 3 ) {
+      PVector v1 = boxShape.getVertex( i );
+      PVector v2 = boxShape.getVertex( i + 1 );
+      PVector v3 = boxShape.getVertex( i + 2 );
+      toFaceOutwards.addFace( new Vec3D( v1.x, v1.y, v1.z ), new Vec3D( v2.x, v2.y, v2.z ),
+          new Vec3D( v3.x, v3.y, v3.z ) );
+    }
+
+    dontFaceOutwards.computeFaceNormals();
+    dontFaceOutwards.computeVertexNormals();
+    // boxMesh.faceOutwards();
+
+    toFaceOutwards.computeFaceNormals();
+    toFaceOutwards.computeVertexNormals();
+    toFaceOutwards.faceOutwards();
+
+    this.mesh.addMesh( toFaceOutwards );
+    this.mesh.addMesh( dontFaceOutwards );
 
     System.out.println( "CREATED MESH" );
     finishedCreatingMesh = true;
